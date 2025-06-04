@@ -1,26 +1,34 @@
-# Crazy Imagine
+# Crazy Imagine - Prueba Técnica
 
 [![Laravel](https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)](https://laravel.com)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
-[![Docker](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 
 ## Descripción del Proyecto
 
-Aplicación web desarrollada con Laravel 10 y PostgreSQL, utilizando Docker para el entorno de desarrollo.
+Aplicación web desarrollada con Laravel 12 que consume datos de la API JSONPlaceholder para mostrar usuarios, publicaciones y comentarios. Incluye un sistema de caché, procesamiento en segundo plano con colas, y una interfaz de usuario responsiva construida con Tailwind CSS.
 
-## Requisitos Previos
+## Características Principales
 
-- [Docker](https://www.docker.com/products/docker-desktop/)
-- [Docker Compose](https://docs.docker.com/compose/install/)
-- [Git](https://git-scm.com/)
-- PHP 8.2+
+- 🚀 **Interfaz de usuario moderna y responsiva** con Tailwind CSS
+- ⚡ **Sistema de caché** para mejorar el rendimiento
+- 🔄 **Procesamiento asíncrono** con colas de Laravel
+- 📊 Visualización de datos de usuarios, publicaciones y comentarios
+- 🔍 Búsqueda y filtrado
+- 📱 Diseño adaptable a dispositivos móviles
+
+## Requisitos del Sistema
+
+- PHP 8.2 o superior
 - Composer
+- Node.js 16+ y NPM
+- PostgreSQL 14+
 
-## Configuración del Entorno
+## Instalación
 
 1. **Clonar el repositorio**
    ```bash
-   git clone [URL_DEL_REPOSITORIO]
+   git clone https://github.com/gisuss/crazy-imagine.git
    cd crazy-imagine
    ```
 
@@ -29,173 +37,123 @@ Aplicación web desarrollada con Laravel 10 y PostgreSQL, utilizando Docker para
    composer install
    ```
 
-3. **Copiar el archivo .env**
+3. **Copiar y configurar el archivo .env**
    ```bash
    cp .env.example .env
+   php artisan key:generate
    ```
 
-4. **Configurar variables de entorno**
-   Asegúrate de que tu archivo `.env` tenga la siguiente configuración para la base de datos:
+4. **Configurar la base de datos**
+   Editar el archivo `.env` con tus credenciales de PostgreSQL:
    ```env
    DB_CONNECTION=pgsql
-   DB_HOST=pgsql
+   DB_HOST=127.0.0.1
    DB_PORT=5432
-   DB_DATABASE=laravel
-   DB_USERNAME=sail
-   DB_PASSWORD=password
+   DB_DATABASE=nombre_base_datos
+   DB_USERNAME=usuario
+   DB_PASSWORD=contraseña
    ```
 
-## Iniciar el Entorno de Desarrollo
-
-1. **Iniciar los contenedores**
+5. **Ejecutar migraciones y seeders**
    ```bash
-   ./vendor/bin/sail up -d
+   php artisan migrate --seed
    ```
 
-2. **Instalar dependencias de Node.js**
+6. **Instalar dependencias de Node.js**
    ```bash
-   ./vendor/bin/sail npm install
+   npm install
    ```
 
-3. **Construir assets**
+7. **Compilar assets**
    ```bash
-   ./vendor/bin/sail npm run dev
+   npm run dev
+   # o para producción:
+   # npm run build
    ```
 
-4. **Ejecutar migraciones**
+8. **Iniciar el servidor de desarrollo**
    ```bash
-   ./vendor/bin/sail artisan migrate
+   php artisan serve
    ```
 
-5. **Ejecutar seeders (opcional)**
+9. **Iniciar el worker de colas (en otra terminal)**
    ```bash
-   ./vendor/bin/sail artisan db:seed
+   php artisan queue:work
    ```
 
-La aplicación estará disponible en: http://localhost:8080
+10. **Opcional: Iniciar el scheduler para tareas programadas**
+    ```bash
+    php artisan schedule:work
+    ```
 
 ## Estructura del Proyecto
 
 ```
 crazy-imagine/
-├── app/
-│   ├── Models/              # Modelos de Eloquent
-│   │   ├── User.php
-│   │   ├── Post.php
-│   │   ├── Comment.php
-│   │   ├── Address.php
-│   │   └── Company.php
-│   └── ...
-├── config/                # Archivos de configuración
-├── database/
-│   ├── migrations/        # Migraciones de base de datos
-│   └── seeders/           # Seeders para datos de prueba
-├── public/                # Punto de entrada de la aplicación
-├── resources/
-│   ├── js/               # Archivos JavaScript
-│   ├── views/             # Vistas de Blade
-│   └── ...
-├── routes/               # Rutas de la aplicación
-├── storage/               # Almacenamiento de archivos
-├── tests/                 # Pruebas automatizadas
-└── vendor/                # Dependencias de Composer
+├── app/                    # Código fuente de la aplicación
+│   ├── Console/            # Comandos de Artisan
+│   ├── Http/               # Controladores, Middleware, etc.
+│   ├── Models/             # Modelos de Eloquent
+│   ├── Services/           # Servicios de la aplicación
+│   └── Traits/             # Traits reutilizables
+├── config/                 # Archivos de configuración
+├── database/               # Migraciones, seeders, factories
+├── public/                 # Punto de entrada de la aplicación
+├── resources/              # Vistas y assets sin compilar
+│   ├── js/                 # Archivos JavaScript
+│   ├── css/                # Archivos CSS
+│   └── views/              # Vistas Blade
+├── routes/                 # Rutas de la aplicación
+├── storage/                # Almacenamiento de archivos
+└── tests/                  # Pruebas automatizadas
 ```
 
 ## Comandos Útiles
 
-- **Iniciar el entorno de desarrollo**
+- **Obtener datos de la API externa**
   ```bash
-  ./vendor/bin/sail up -d
+  php artisan fetch:data
   ```
 
-- **Detener los contenedores**
+- **Limpiar caché manualmente**
   ```bash
-  ./vendor/bin/sail down
+  php artisan cache:clear-all
   ```
 
-- **Ejecutar migraciones**
+- **Limpiar caché de configuración, rutas y vistas**
   ```bash
-  ./vendor/bin/sail artisan migrate
+  php artisan optimize:clear
   ```
 
-- **Ejecutar pruebas**
+- **Ejecutar worker de colas**
   ```bash
-  ./vendor/bin/sail test
+  php artisan queue:work
   ```
 
-- **Acceder a la terminal del contenedor**
+- **Ejecutar scheduler**
   ```bash
-  ./vendor/bin/sail shell
+  php artisan schedule:work
   ```
-
-## Configuración de Base de Datos
-
-La aplicación utiliza PostgreSQL como base de datos. La configuración por defecto es:
-
-- **Host**: pgsql (dentro de Docker) o localhost (fuera de Docker)
-- **Puerto**: 5432
-- **Base de datos**: laravel
-- **Usuario**: sail
-- **Contraseña**: password
 
 ## Variables de Entorno Importantes
 
-```env
-APP_NAME="Crazy Imagine"
-APP_ENV=local
-APP_DEBUG=true
-APP_URL=http://localhost:8080
+- `APP_DEBUG`: Habilita/deshabilita el modo depuración
+- `CACHE_DRIVER`: Controlador de caché (database, file, redis, etc.)
+- `QUEUE_CONNECTION`: Controlador de colas (sync, database, redis, etc.)
+- `APP_URL`: URL base de la aplicación
 
-DB_CONNECTION=pgsql
-DB_HOST=pgsql
-DB_PORT=5432
-DB_DATABASE=laravel
-DB_USERNAME=sail
-DB_PASSWORD=password
+## Contribución
 
-CACHE_DRIVER=redis
-QUEUE_CONNECTION=redis
-SESSION_DRIVER=redis
-
-MAIL_MAILER=smtp
-MAIL_HOST=mailhog
-MAIL_PORT=1025
-MAIL_USERNAME=null
-MAIL_PASSWORD=null
-MAIL_ENCRYPTION=null
-MAIL_FROM_ADDRESS="hello@example.com"
-MAIL_FROM_NAME="${APP_NAME}"
-```
-
-## Solución de Problemas
-
-### Error de conexión a la base de datos
-
-Si recibes un error de conexión a la base de datos, verifica que:
-
-1. Los contenedores estén en ejecución:
-   ```bash
-   docker ps
-   ```
-
-2. La configuración en `.env` sea correcta
-
-3. La base de datos esté accesible desde el contenedor:
-   ```bash
-   ./vendor/bin/sail exec pgsql psql -U sail -d laravel -c "\dt"
-   ```
-
-### Limpiar caché
-
-Si encuentras problemas con las vistas o rutas, intenta limpiar la caché:
-
-```bash
-./vendor/bin/sail artisan cache:clear
-./vendor/bin/sail artisan config:clear
-./vendor/bin/sail artisan route:clear
-./vendor/bin/sail artisan view:clear
-```
+1. Hacer fork del repositorio
+2. Crear una rama para tu característica (`git checkout -b feature/AmazingFeature`)
+3. Hacer commit de tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Hacer push a la rama (`git push origin feature/AmazingFeature`)
+5. Abrir un Pull Request
 
 ## Licencia
 
-Este proyecto está bajo la [Licencia MIT](LICENSE).
+Este proyecto está bajo la Licencia MIT.
+
+---
+
+Desarrollado para la prueba técnica de **Crazy Imagine**
