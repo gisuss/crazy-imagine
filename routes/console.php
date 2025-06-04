@@ -1,8 +1,15 @@
 <?php
 
-use Illuminate\Foundation\Inspiring;
+use Illuminate\Support\Facades\Schedule;
 use Illuminate\Support\Facades\Artisan;
 
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote');
+// Programación de tareas
+Schedule::command('fetch:data')
+    ->everyMinute()
+    ->withoutOverlapping()
+    ->onOneServer()
+    ->appendOutputTo(storage_path('logs/fetch-data.log'));
+
+Schedule::command('cache:clear-all')
+    ->daily()
+    ->withoutOverlapping();

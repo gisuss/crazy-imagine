@@ -1,61 +1,201 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Crazy Imagine
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+[![Laravel](https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)](https://laravel.com)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Docker](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
 
-## About Laravel
+## Descripción del Proyecto
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Aplicación web desarrollada con Laravel 10 y PostgreSQL, utilizando Docker para el entorno de desarrollo.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Requisitos Previos
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- [Docker](https://www.docker.com/products/docker-desktop/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+- [Git](https://git-scm.com/)
+- PHP 8.2+
+- Composer
 
-## Learning Laravel
+## Configuración del Entorno
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+1. **Clonar el repositorio**
+   ```bash
+   git clone [URL_DEL_REPOSITORIO]
+   cd crazy-imagine
+   ```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+2. **Instalar dependencias de PHP**
+   ```bash
+   composer install
+   ```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+3. **Copiar el archivo .env**
+   ```bash
+   cp .env.example .env
+   ```
 
-## Laravel Sponsors
+4. **Configurar variables de entorno**
+   Asegúrate de que tu archivo `.env` tenga la siguiente configuración para la base de datos:
+   ```env
+   DB_CONNECTION=pgsql
+   DB_HOST=pgsql
+   DB_PORT=5432
+   DB_DATABASE=laravel
+   DB_USERNAME=sail
+   DB_PASSWORD=password
+   ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Iniciar el Entorno de Desarrollo
 
-### Premium Partners
+1. **Iniciar los contenedores**
+   ```bash
+   ./vendor/bin/sail up -d
+   ```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+2. **Instalar dependencias de Node.js**
+   ```bash
+   ./vendor/bin/sail npm install
+   ```
 
-## Contributing
+3. **Construir assets**
+   ```bash
+   ./vendor/bin/sail npm run dev
+   ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+4. **Ejecutar migraciones**
+   ```bash
+   ./vendor/bin/sail artisan migrate
+   ```
 
-## Code of Conduct
+5. **Ejecutar seeders (opcional)**
+   ```bash
+   ./vendor/bin/sail artisan db:seed
+   ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+La aplicación estará disponible en: http://localhost:8080
 
-## Security Vulnerabilities
+## Estructura del Proyecto
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```
+crazy-imagine/
+├── app/
+│   ├── Models/              # Modelos de Eloquent
+│   │   ├── User.php
+│   │   ├── Post.php
+│   │   ├── Comment.php
+│   │   ├── Address.php
+│   │   └── Company.php
+│   └── ...
+├── config/                # Archivos de configuración
+├── database/
+│   ├── migrations/        # Migraciones de base de datos
+│   └── seeders/           # Seeders para datos de prueba
+├── public/                # Punto de entrada de la aplicación
+├── resources/
+│   ├── js/               # Archivos JavaScript
+│   ├── views/             # Vistas de Blade
+│   └── ...
+├── routes/               # Rutas de la aplicación
+├── storage/               # Almacenamiento de archivos
+├── tests/                 # Pruebas automatizadas
+└── vendor/                # Dependencias de Composer
+```
 
-## License
+## Comandos Útiles
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- **Iniciar el entorno de desarrollo**
+  ```bash
+  ./vendor/bin/sail up -d
+  ```
+
+- **Detener los contenedores**
+  ```bash
+  ./vendor/bin/sail down
+  ```
+
+- **Ejecutar migraciones**
+  ```bash
+  ./vendor/bin/sail artisan migrate
+  ```
+
+- **Ejecutar pruebas**
+  ```bash
+  ./vendor/bin/sail test
+  ```
+
+- **Acceder a la terminal del contenedor**
+  ```bash
+  ./vendor/bin/sail shell
+  ```
+
+## Configuración de Base de Datos
+
+La aplicación utiliza PostgreSQL como base de datos. La configuración por defecto es:
+
+- **Host**: pgsql (dentro de Docker) o localhost (fuera de Docker)
+- **Puerto**: 5432
+- **Base de datos**: laravel
+- **Usuario**: sail
+- **Contraseña**: password
+
+## Variables de Entorno Importantes
+
+```env
+APP_NAME="Crazy Imagine"
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://localhost:8080
+
+DB_CONNECTION=pgsql
+DB_HOST=pgsql
+DB_PORT=5432
+DB_DATABASE=laravel
+DB_USERNAME=sail
+DB_PASSWORD=password
+
+CACHE_DRIVER=redis
+QUEUE_CONNECTION=redis
+SESSION_DRIVER=redis
+
+MAIL_MAILER=smtp
+MAIL_HOST=mailhog
+MAIL_PORT=1025
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_ENCRYPTION=null
+MAIL_FROM_ADDRESS="hello@example.com"
+MAIL_FROM_NAME="${APP_NAME}"
+```
+
+## Solución de Problemas
+
+### Error de conexión a la base de datos
+
+Si recibes un error de conexión a la base de datos, verifica que:
+
+1. Los contenedores estén en ejecución:
+   ```bash
+   docker ps
+   ```
+
+2. La configuración en `.env` sea correcta
+
+3. La base de datos esté accesible desde el contenedor:
+   ```bash
+   ./vendor/bin/sail exec pgsql psql -U sail -d laravel -c "\dt"
+   ```
+
+### Limpiar caché
+
+Si encuentras problemas con las vistas o rutas, intenta limpiar la caché:
+
+```bash
+./vendor/bin/sail artisan cache:clear
+./vendor/bin/sail artisan config:clear
+./vendor/bin/sail artisan route:clear
+./vendor/bin/sail artisan view:clear
+```
+
+## Licencia
+
+Este proyecto está bajo la [Licencia MIT](LICENSE).
