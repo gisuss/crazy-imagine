@@ -14,6 +14,7 @@ class Company extends Model
         'name',
         'catchPhrase',
         'bs',
+        'user_id',
     ];
 
     public function users(): BelongsTo
