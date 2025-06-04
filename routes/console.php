@@ -9,3 +9,7 @@ Schedule::command('fetch:data')
     ->withoutOverlapping()
     ->onOneServer()
     ->appendOutputTo(storage_path('logs/fetch-data.log'));
+
+Schedule::command('cache:clear-all')
+    ->daily()
+    ->withoutOverlapping();

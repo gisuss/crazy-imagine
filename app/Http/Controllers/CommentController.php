@@ -13,25 +13,37 @@ class CommentController extends Controller
      */
     public function index(): View
     {
-        $comments = Comment::with(['post', 'post.user'])
-            ->when(request('post_id'), function($query) {
-                return $query->where('post_id', request('post_id'));
-            })
-            ->when(request('search'), function($query) {
-                $search = '%' . request('search') . '%';
-                return $query->where(function($q) use ($search) {
-                    $q->where('name', 'like', $search)
-                      ->orWhere('email', 'like', $search)
-                      ->orWhere('body', 'like', $search);
-                });
-            })
-            ->latest()
-            ->paginate(15)
-            ->withQueryString();
+        $cacheKey = 'comments_' . md5(serialize([
+            'post_id' => request('post_id'),
+            'search' => request('search'),
+            'page' => request('page', 1)
+        ]));
+
+        $comments = \App\Services\CacheService::remember($cacheKey, function() {
+            return Comment::with(['post', 'post.user'])
+                ->when(request('post_id'), function($query) {
+                    return $query->where('post_id', request('post_id'));
+                })
+                ->when(request('search'), function($query) {
+                    $search = '%' . request('search') . '%';
+                    return $query->where(function($q) use ($search) {
+                        $q->where('name', 'like', $search)
+                          ->orWhere('email', 'like', $search)
+                          ->orWhere('body', 'like', $search);
+                    });
+                })
+                ->latest()
+                ->paginate(15)
+                ->withQueryString();
+        }, 30); // Cache por 30 minutos
+
+        $posts = \App\Services\CacheService::remember('posts_ordered_by_title', function() {
+            return \App\Models\Post::orderBy('title')->get(['id', 'title']);
+        }, 60); // Cache por 1 hora
 
         return view('comments.index', [
             'comments' => $comments,
-            'posts' => \App\Models\Post::orderBy('title')->get()
+            'posts' => $posts
         ]);
     }
 
